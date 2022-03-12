@@ -230,7 +230,7 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
     # - avoid issues and complexities of multiple inheritance 
     # - - (i.e. if class D has parents B and C, both of whose parent is A, then does D use B or C's version of any given method)
 
-    # ACTIVITY 4A - Trigger the code below by using the software application, setting breakpoints, and observing what happens.
+    # ACTIVITY 4A - Trigger the code below by using the software application, writing print statements, and observing what happens.
     # - Why are mixins used here - briefly explain below. Here are some ideas, but which ones apply in this case? Any other reasons?
     # - (A) mixin can be used by multiple classes - code reusability 
     # - - (i.e. avoiding code repetition and promoting code reuse, so there is less complexity and room for error)
@@ -349,7 +349,7 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
         # - avoid issues and complexities of multiple inheritance 
         # - - (i.e. if class D has parents B and C, both of whose parent is A, then does D use B or C's version of any given method)
 
-        # ACTIVITY 4A - Trigger the code below by using the software application, setting breakpoints, and observing what happens.
+        # ACTIVITY 4A - Trigger the code below by using the software application, writing print statements, and observing what happens.
         # - Why are mixins used here - briefly explain below. Here are some ideas, but which ones apply in this case? Any other reasons?
         # - (A) mixin can be used by multiple classes - code reusability 
         # - - (i.e. avoiding code repetition and promoting code reuse, so there is less complexity and room for error)
