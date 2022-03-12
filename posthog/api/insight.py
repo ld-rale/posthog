@@ -216,7 +216,7 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
     include_in_docs = True
 
     def get_serializer_class(self) -> Type[serializers.BaseSerializer]:
-
+        print("HIGHLIGHT in InsightViewSet get_serializer_class")
         if (self.action == "list" or self.action == "retrieve") and str_to_bool(
             self.request.query_params.get("basic", "0"),
         ):
@@ -250,6 +250,7 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
     # - (note to experimenter: put get_queryset implementation on side-by-side view)
     ############################################################################
     def get_queryset(self) -> QuerySet:
+        print("HIGHLIGHT in InsightViewSet get_queryset")
         queryset = super().get_queryset()
         if self.action == "list":
             queryset = queryset.filter(deleted=False)
@@ -264,6 +265,7 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
         return queryset
 
     def _filter_request(self, request: request.Request, queryset: QuerySet) -> QuerySet:
+        print("HIGHLIGHT in InsightViewSet _filter_request")
         filters = request.GET.dict()
 
         for key in filters:
@@ -290,6 +292,7 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
 
     @action(methods=["patch"], detail=False)
     def layouts(self, request, **kwargs):
+        print("HIGHLIGHT in InsightViewSet layouts")
         """Dashboard item layouts."""
         queryset = self.get_queryset()
         for data in request.data["items"]:
@@ -324,6 +327,7 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
     )
     @action(methods=["GET", "POST"], detail=False)
     def trend(self, request: request.Request, *args: Any, **kwargs: Any) -> Response:
+        print("HIGHLIGHT in InsightViewSet trend")
         try:
             serializer = TrendSerializer(request=request)
             serializer.is_valid(raise_exception=True)
@@ -368,7 +372,7 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
 
         # - (note to experimenter: put get_queryset implementation on side-by-side view)
         ############################################################################
-        print("GOBI in calculate trends")
+        print("HIGHLIGHT in InsightViewSet calculate_trends")
         team = self.team
         filter = Filter(request=request, team=self.team)
 
@@ -406,7 +410,7 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
     )
     @action(methods=["GET", "POST"], detail=False)
     def funnel(self, request: request.Request, *args: Any, **kwargs: Any) -> Response:
-        print("GOBI in funnel")
+        print("HIGHLIGHT in InsightViewSet funnel")
         try:
             serializer = FunnelSerializer(request=request)
             serializer.is_valid(raise_exception=True)
@@ -421,7 +425,7 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
 
     @cached_function
     def calculate_funnel(self, request: request.Request) -> Dict[str, Any]:
-        print("GOBI in calculate funnel")
+        print("HIGHLIGHT in InsightViewSet calculate_funnel")
         team = self.team
         filter = Filter(request=request, data={"insight": INSIGHT_FUNNELS}, team=self.team)
 
@@ -441,13 +445,13 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
     # ******************************************
     @action(methods=["GET"], detail=False)
     def retention(self, request: request.Request, *args: Any, **kwargs: Any) -> Response:
-        print("GOBI in retention")
+        print("HIGHLIGHT in InsightViewSet retention")
         result = self.calculate_retention(request)
         return Response(result)
 
     @cached_function
     def calculate_retention(self, request: request.Request) -> Dict[str, Any]:
-        print("GOBI in calculate retention")
+        print("HIGHLIGHT in InsightViewSet calculate_retention")
         team = self.team
         data = {}
         if not request.GET.get("date_from"):
@@ -466,13 +470,13 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
     # ******************************************
     @action(methods=["GET", "POST"], detail=False)
     def path(self, request: request.Request, *args: Any, **kwargs: Any) -> Response:
-        print("GOBI in path")
+        print("HIGHLIGHT in InsightViewSet path")
         result = self.calculate_path(request)
         return Response(result)
 
     @cached_function
     def calculate_path(self, request: request.Request) -> Dict[str, Any]:
-        print("GOBI in calculate path")
+        print("HIGHLIGHT in InsightViewSet calculate_path")
         team = self.team
         filter = PathFilter(request=request, data={"insight": INSIGHT_PATHS}, team=self.team)
 
@@ -492,7 +496,7 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
 
     # Checks if a dashboard id has been set and if so, update the refresh date
     def _refresh_dashboard(self, request) -> None:
-        print("GOBI in refresh dash")
+        print("HIGHLIGHT in InsightViewSet _refresh_dashboard")
         dashboard_id = request.GET.get(FROM_DASHBOARD, None)
         if dashboard_id:
             Insight.objects.filter(pk=dashboard_id).update(last_refresh=now())

@@ -167,7 +167,7 @@ class ActionViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mod
     ordering = ["-last_calculated_at", "name"]
 
     def get_queryset(self):
-        print("HIGHLIGHT in ActionViewSet gq")
+        print("HIGHLIGHT in ActionViewSet get_queryset")
         queryset = super().get_queryset()
         if self.action == "list":
             queryset = queryset.filter(deleted=False)
@@ -252,8 +252,8 @@ class ActionViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mod
 
 @receiver(post_save, sender=Action, dispatch_uid="hook-action-defined")
 def action_defined(sender, instance, created, raw, using, **kwargs):
-    """Trigger action_defined hooks on Action creation."""
     print("HIGHLIGHT in ActionViewSet action_defined")
+    """Trigger action_defined hooks on Action creation."""
     if created:
         raw_hook_event.send(
             sender=None,

@@ -65,6 +65,7 @@ class EventViewSet(StructuredViewSetMixin, mixins.RetrieveModelMixin, mixins.Lis
     CSV_EXPORT_MAXIMUM_LIMIT = 100_000
 
     def _build_next_url(self, request: request.Request, last_event_timestamp: datetime) -> str:
+        print("HIGHLIGHT in EventViewSet _build_next_url")
         params = request.GET.dict()
         reverse = request.GET.get("orderBy", "-timestamp") != "-timestamp"
         timestamp = last_event_timestamp.astimezone().isoformat()
@@ -75,11 +76,13 @@ class EventViewSet(StructuredViewSetMixin, mixins.RetrieveModelMixin, mixins.Lis
         return request.build_absolute_uri(f"{request.path}?{urllib.parse.urlencode(params)}")
 
     def _parse_order_by(self, request: request.Request) -> List[str]:
+        print("HIGHLIGHT in EventViewSet _parse_order_by")
         order_by_param = request.GET.get("orderBy")
         return ["-timestamp"] if not order_by_param else list(json.loads(order_by_param))
 
     @extend_schema(parameters=[PropertiesSerializer(required=False)],)
     def list(self, request: request.Request, *args: Any, **kwargs: Any) -> response.Response:
+        print("HIGHLIGHT in EventViewSet list")
         is_csv_request = self.request.accepted_renderer.format == "csv"
 
         if self.request.GET.get("limit", None):
@@ -112,6 +115,7 @@ class EventViewSet(StructuredViewSetMixin, mixins.RetrieveModelMixin, mixins.Lis
         return response.Response({"next": next_url, "results": result})
 
     def _get_people(self, query_result: List[Dict], team: Team) -> Dict[str, Any]:
+        print("HIGHLIGHT in EventViewSet _get_people")
         distinct_ids = [event[5] for event in query_result]
         persons = get_persons_by_distinct_ids(team.pk, distinct_ids)
         persons = persons.prefetch_related(Prefetch("persondistinctid_set", to_attr="distinct_ids_cache"))
@@ -124,6 +128,7 @@ class EventViewSet(StructuredViewSetMixin, mixins.RetrieveModelMixin, mixins.Lis
     def _query_events_list(
         self, filter: Filter, team: Team, request: request.Request, long_date_from: bool = False, limit: int = 100
     ) -> List:
+        print("HIGHLIGHT in EventViewSet _query_events_list")
         limit += 1
         limit_sql = "LIMIT %(limit)s"
         order = "DESC" if self._parse_order_by(self.request)[0] == "-timestamp" else "ASC"
@@ -168,6 +173,7 @@ class EventViewSet(StructuredViewSetMixin, mixins.RetrieveModelMixin, mixins.Lis
     def retrieve(
         self, request: request.Request, pk: Optional[Union[int, str]] = None, *args: Any, **kwargs: Any
     ) -> response.Response:
+        print("HIGHLIGHT in EventViewSet retrieve")
         if not isinstance(pk, str) or not UUIDT.is_valid_uuid(pk):
             return response.Response(
                 {"detail": "Invalid UUID", "code": "invalid", "type": "validation_error",}, status=400
@@ -180,6 +186,7 @@ class EventViewSet(StructuredViewSetMixin, mixins.RetrieveModelMixin, mixins.Lis
 
     @action(methods=["GET"], detail=False)
     def values(self, request: request.Request, **kwargs) -> response.Response:
+        print("HIGHLIGHT in EventViewSet values")
         key = request.GET.get("key")
         team = self.team
         flattened = []

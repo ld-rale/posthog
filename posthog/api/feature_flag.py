@@ -156,6 +156,7 @@ class FeatureFlagViewSet(StructuredViewSetMixin, AnalyticsDestroyModelMixin, vie
     ]
 
     def get_queryset(self) -> QuerySet:
+        print("HIGHLIGHT in FeatureFlagViewSet get_queryset")
         queryset = super().get_queryset()
         if self.action == "list":
             queryset = queryset.filter(deleted=False, experiment__isnull=True)
@@ -163,6 +164,7 @@ class FeatureFlagViewSet(StructuredViewSetMixin, AnalyticsDestroyModelMixin, vie
 
     @action(methods=["GET"], detail=False)
     def my_flags(self, request: request.Request, **kwargs):
+        print("HIGHLIGHT in FeatureFlagViewSet my_flags")
         if not request.user.is_authenticated:  # for mypy
             raise exceptions.NotAuthenticated()
 
@@ -262,10 +264,12 @@ class FeatureFlagOverrideViewset(StructuredViewSetMixin, AnalyticsDestroyModelMi
     include_in_docs = False
 
     def get_queryset(self) -> QuerySet:
+        print("HIGHLIGHT in FeatureFlagViewSet get_queryset")
         return super().get_queryset().filter(user=self.request.user)
 
     @action(methods=["POST"], detail=False)
     def my_overrides(self, request: request.Request, **kwargs):
+        print("HIGHLIGHT in FeatureFlagViewSet my_overrides")
         if request.method == "POST":
             user = request.user
             serializer = FeatureFlagOverrideSerializer(

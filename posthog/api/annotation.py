@@ -60,6 +60,7 @@ class AnnotationsViewSet(StructuredViewSetMixin, AnalyticsDestroyModelMixin, vie
     permission_classes = [IsAuthenticated, ProjectMembershipNecessaryPermissions, TeamMemberAccessPermission]
 
     def get_queryset(self) -> QuerySet:
+        print("HIGHLIGHT in AnnotationsViewSet get_queryset")
         queryset = super().get_queryset()
         if self.action == "list":
             queryset = self._filter_request(self.request, queryset)
@@ -70,6 +71,7 @@ class AnnotationsViewSet(StructuredViewSetMixin, AnalyticsDestroyModelMixin, vie
         return queryset
 
     def _filter_request(self, request: request.Request, queryset: QuerySet) -> QuerySet:
+        print("HIGHLIGHT in AnnotationsViewSet _filter_request")
         filters = request.GET.dict()
 
         for key in filters:

@@ -89,12 +89,13 @@ class StructuredViewSetMixin(_GenericViewSet):
     # [SKIP] (note to self: show how the code snippets would get removed and one would have to fill them back in)  
     ############################################################################
     def get_queryset(self):
-        print("GOBI in get_queryset")
+        print("HIGHLIGHT in StructuredViewSetMixin get_queryset")
         queryset = super().get_queryset()
         return self.filter_queryset_by_parents_lookups(queryset)
 
     @property
     def team_id(self) -> int:
+        print("HIGHLIGHT in StructuredViewSetMixin team_id")
         team_from_token = self._get_team_from_request()
         if team_from_token:
             return team_from_token.id
@@ -117,7 +118,7 @@ class StructuredViewSetMixin(_GenericViewSet):
     ############################################################################
     @property
     def team(self) -> Team:
-        print("GOBI in team")
+        print("HIGHLIGHT in StructuredViewSetMixin team")
         team_from_token = self._get_team_from_request()
         if team_from_token:
             return team_from_token
@@ -134,6 +135,7 @@ class StructuredViewSetMixin(_GenericViewSet):
 
     @property
     def organization_id(self) -> str:
+        print("HIGHLIGHT in StructuredViewSetMixin organization_id")
         try:
             return self.parents_query_dict["organization_id"]
         except KeyError:
@@ -141,12 +143,14 @@ class StructuredViewSetMixin(_GenericViewSet):
 
     @property
     def organization(self) -> Organization:
+        print("HIGHLIGHT in StructuredViewSetMixin organization")
         try:
             return Organization.objects.get(id=self.organization_id)
         except Organization.DoesNotExist:
             raise NotFound(detail="Organization not found.")
 
     def filter_queryset_by_parents_lookups(self, queryset):
+        print("HIGHLIGHT in StructuredViewSetMixin filter_queryset_by_parents_lookups")
         parents_query_dict = self.parents_query_dict.copy()
 
         for source, destination in self.filter_rewrite_rules.items():
@@ -162,6 +166,7 @@ class StructuredViewSetMixin(_GenericViewSet):
 
     @cached_property
     def parents_query_dict(self) -> Dict[str, Any]:
+        print("HIGHLIGHT in StructuredViewSetMixin parents_query_dict")
         # used to override the last visited project if there's a token in the request
         team_from_request = self._get_team_from_request()
 
@@ -203,9 +208,11 @@ class StructuredViewSetMixin(_GenericViewSet):
         return result
 
     def get_serializer_context(self) -> Dict[str, Any]:
+        print("HIGHLIGHT in StructuredViewSetMixin get_serializer_context")
         return {**super().get_serializer_context(), **self.parents_query_dict}
 
     def _get_team_from_request(self) -> Optional["Team"]:
+        print("HIGHLIGHT in StructuredViewSetMixin _get_team_from_request")
         team_found = None
         token = get_token(None, self.request)
 

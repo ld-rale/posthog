@@ -152,7 +152,7 @@ class CohortViewSet(StructuredViewSetMixin, viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, ProjectMembershipNecessaryPermissions, TeamMemberAccessPermission]
 
     def get_queryset(self) -> QuerySet:
-        print("GOBI in CohortViewSet gq")
+        print("HIGHLIGHT in CohortViewSet get_queryset")
         queryset = super().get_queryset()
         if self.action == "list":
             queryset = queryset.filter(deleted=False)
@@ -161,6 +161,7 @@ class CohortViewSet(StructuredViewSetMixin, viewsets.ModelViewSet):
 
     @action(methods=["GET"], detail=True)
     def persons(self, request: Request, **kwargs) -> Response:
+        print("HIGHLIGHT in CohortViewSet get_queryset")
         cohort: Cohort = self.get_object()
         team = self.team
         filter = Filter(request=request, team=self.team)
