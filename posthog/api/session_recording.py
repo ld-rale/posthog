@@ -50,19 +50,23 @@ class SessionRecordingViewSet(StructuredViewSetMixin, viewsets.GenericViewSet):
     permission_classes = [IsAuthenticated, ProjectMembershipNecessaryPermissions, TeamMemberAccessPermission]
 
     def _get_session_recording_list(self, filter):
+        print("HIGHLIGHT in SessionRecordingViewSet _get_session_recording_list")
         return ClickhouseSessionRecordingList(filter=filter, team=self.team).run()
 
     def _get_session_recording_snapshots(self, request, session_recording_id, limit, offset):
+        print("HIGHLIGHT in SessionRecordingViewSet _get_session_recording_snapshots")
         return ClickhouseSessionRecording(
             request=request, team=self.team, session_recording_id=session_recording_id
         ).get_snapshots(limit, offset)
 
     def _get_session_recording_meta_data(self, request, session_recording_id):
+        print("HIGHLIGHT in SessionRecordingViewSet _get_session_recording_meta_data")
         return ClickhouseSessionRecording(
             request=request, team=self.team, session_recording_id=session_recording_id
         ).get_metadata()
 
     def list(self, request: request.Request, *args: Any, **kwargs: Any) -> Response:
+        print("HIGHLIGHT in SessionRecordingViewSet list")
         filter = SessionRecordingsFilter(request=request)
         (session_recordings, more_recordings_available) = self._get_session_recording_list(filter)
 
@@ -106,6 +110,7 @@ class SessionRecordingViewSet(StructuredViewSetMixin, viewsets.GenericViewSet):
 
     # Returns meta data about the recording
     def retrieve(self, request: request.Request, *args: Any, **kwargs: Any) -> response.Response:
+        print("HIGHLIGHT in SessionRecordingViewSet retrieve")
         session_recording_id = kwargs["pk"]
 
         session_recording_meta_data = self._get_session_recording_meta_data(request, session_recording_id)
@@ -154,6 +159,7 @@ class SessionRecordingViewSet(StructuredViewSetMixin, viewsets.GenericViewSet):
     # Paginated endpoint that returns the snapshots for the recording
     @action(methods=["GET"], detail=True)
     def snapshots(self, request: request.Request, **kwargs):
+        print("HIGHLIGHT in SessionRecordingViewSet snapshots")
         session_recording_id = kwargs["pk"]
         filter = Filter(request=request)
         limit = filter.limit if filter.limit else DEFAULT_RECORDING_CHUNK_LIMIT

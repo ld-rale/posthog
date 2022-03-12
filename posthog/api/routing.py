@@ -81,13 +81,15 @@ class StructuredViewSetMixin(_GenericViewSet):
     # ACTIVITY 3A - Highlight where this Mixin's methods get_queryset is being adopted / used by a class (or class instance) that includes this Mixin. 
     # - Hint: look at the other highlighted files in the file system.
     # - Trigger the mixin code (i.e. the "mixed in" code) below by using the software application, writing print statements, and watching them trigger.
+    # - - You can uncomment the prints we included and print variables too.
     # - Describe how this Mixin's get_queryset method is being used there.
 
-    # [SKIP] ACTIVITY 6 - Now we are going remove all declarations of StructuredViewSetMixin and also the AnalyticsDestroyModelMixin.
+    # [SKIP] ACTIVITY 5 - Now we are going remove all declarations of StructuredViewSetMixin and also the AnalyticsDestroyModelMixin.
     # [SKIP] - And you should fill in each blank, based on the methods / properties that the class adopting the mixins uses.
     # [SKIP] (note to self: show how the code snippets would get removed and one would have to fill them back in)  
     ############################################################################
     def get_queryset(self):
+        print("GOBI in get_queryset")
         queryset = super().get_queryset()
         return self.filter_queryset_by_parents_lookups(queryset)
 
@@ -115,6 +117,7 @@ class StructuredViewSetMixin(_GenericViewSet):
     ############################################################################
     @property
     def team(self) -> Team:
+        print("GOBI in team")
         team_from_token = self._get_team_from_request()
         if team_from_token:
             return team_from_token

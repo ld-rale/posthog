@@ -167,6 +167,7 @@ class ActionViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mod
     ordering = ["-last_calculated_at", "name"]
 
     def get_queryset(self):
+        print("HIGHLIGHT in ActionViewSet gq")
         queryset = super().get_queryset()
         if self.action == "list":
             queryset = queryset.filter(deleted=False)
@@ -176,12 +177,14 @@ class ActionViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mod
         return queryset.filter(team_id=self.team_id).order_by(*self.ordering)
 
     def list(self, request: request.Request, *args: Any, **kwargs: Any) -> Response:
+        print("HIGHLIGHT in ActionViewSet list")
         actions = self.get_queryset()
         actions_list: List[Dict[Any, Any]] = self.serializer_class(actions, many=True, context={"request": request}).data  # type: ignore
         return Response({"results": actions_list})
 
     @action(methods=["GET"], detail=False)
     def people(self, request: request.Request, *args: Any, **kwargs: Any) -> Response:
+        print("HIGHLIGHT in ActionViewSet people")
         team = self.team
         filter = Filter(request=request, team=self.team)
         entity = get_target_entity(filter)
@@ -227,6 +230,7 @@ class ActionViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mod
 
     @action(methods=["GET"], detail=True)
     def count(self, request: request.Request, **kwargs) -> Response:
+        print("HIGHLIGHT in ActionViewSet count")
         action = self.get_object()
         query, params = format_action_filter(team_id=action.team_id, action=action)
         if query == "":
@@ -249,6 +253,7 @@ class ActionViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mod
 @receiver(post_save, sender=Action, dispatch_uid="hook-action-defined")
 def action_defined(sender, instance, created, raw, using, **kwargs):
     """Trigger action_defined hooks on Action creation."""
+    print("HIGHLIGHT in ActionViewSet action_defined")
     if created:
         raw_hook_event.send(
             sender=None,

@@ -152,6 +152,7 @@ class CohortViewSet(StructuredViewSetMixin, viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, ProjectMembershipNecessaryPermissions, TeamMemberAccessPermission]
 
     def get_queryset(self) -> QuerySet:
+        print("GOBI in CohortViewSet gq")
         queryset = super().get_queryset()
         if self.action == "list":
             queryset = queryset.filter(deleted=False)
