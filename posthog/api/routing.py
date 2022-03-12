@@ -83,6 +83,8 @@ class StructuredViewSetMixin(_GenericViewSet):
     # - Trigger the mixin code (i.e. the "mixed in" code) below by using the software application, writing print statements, and watching them trigger.
     # - - You can uncomment the prints we included and print variables too.
     # - Describe how this Mixin's get_queryset method is being used there.
+    # - i.e. what does this Mixin's get_queryset do?
+    # - i.e. what does the class that adopts this Mixin's get_queryset do?  
 
     # [SKIP] ACTIVITY 5 - Now we are going remove all declarations of StructuredViewSetMixin and also the AnalyticsDestroyModelMixin.
     # [SKIP] - And you should fill in each blank, based on the methods / properties that the class adopting the mixins uses.
@@ -114,6 +116,8 @@ class StructuredViewSetMixin(_GenericViewSet):
     # - Hint: look at the other highlighted files in the file system.
     # - Trigger the mixin code (i.e. the "mixed in" code) below by using the software application, writing print statements, and watching them trigger.
     # - Describe how this Mixin's team property is being used there.
+    # - i.e. what does this Mixin's get_queryset do?
+    # - i.e. what does the class that adopts this Mixin's get_queryset do? 
 
     ############################################################################
     @property
