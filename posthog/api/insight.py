@@ -197,7 +197,14 @@ class InsightSerializer(TaggedItemSerializerMixin, InsightBasicSerializer):
         representation["filters"] = instance.dashboard_filters(dashboard=self.context.get("dashboard"))
         return representation
 
+############################################################################
+# HIGHLIGHT - Mixins let a class adopt methods and attributes of another class. 
+# - In this case, the InsightViewSet is adopting methods / attributes from the StructuredViewSetMixin.
 
+# Tutorial Example: https://www.patterns.dev/posts/mixin-pattern/
+
+# (note to self: show highlight / mixin label on file in filesystem during demo)
+############################################################################
 class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.ModelViewSet):
     queryset = Insight.objects.all().prefetch_related(
         "dashboard", "dashboard__team", "dashboard__team__organization", "created_by"
@@ -215,7 +222,33 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
         ):
             return InsightBasicSerializer
         return super().get_serializer_class()
+    ############################################################################
+    # HIGHLIGHT - In this case, the InsightViewSet class is adopting the get_queryset method from the StructuredViewSetMixin.
 
+    # Mixins are used if you don't want a class to inherit from another class (i.e. be its child class) but you want it to adopt some attributes / methods. 
+    # - You can think of mixins as uncles and aunts but not necessarily parents. 
+    # - avoid issues and complexities of multiple inheritance 
+    # - - (i.e. if class D has parents B and C, both of whose parent is A, then does D use B or C's version of any given method)
+
+    # ACTIVITY 4A - Trigger the code below by using the software application, setting breakpoints, and observing what happens.
+    # - Why are mixins used here - briefly explain below. Here are some ideas, but which ones apply in this case? Any other reasons?
+    # - (A) mixin can be used by multiple classes - code reusability 
+    # - - (i.e. avoiding code repetition and promoting code reuse, so there is less complexity and room for error)
+    # - - helps with collaboration
+    # - - in https://www.patterns.dev/posts/mixin-pattern/, all animals (dogs, cats, etc) can use the animalFunctionality mixin
+    
+    # - (B) adding lots of optional attributes/methods 
+    # - - (i.e. you want a class to avail of several optional properties or methods)
+    # - - in https://stackoverflow.com/a/547714/1194050, mixins let you allow more supports as needed, but not by default, to instances of Request 
+
+    # - (C) compartmentalization
+    # - - (i.e. code at different levels [data touching, logic, view touching, etc] should be separated so different developers can collaborate easily)
+    # - - in https://www.patterns.dev/posts/mixin-pattern/, functionality for animals in general in animalFunctionality can be separated from dog-specific functionality
+
+    # Hint: Think carefully about the domain / purpose of the application.
+
+    # - (note to experimenter: put get_queryset implementation on side-by-side view)
+    ############################################################################
     def get_queryset(self) -> QuerySet:
         queryset = super().get_queryset()
         if self.action == "list":
@@ -308,6 +341,33 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
 
     @cached_function
     def calculate_trends(self, request: request.Request) -> Dict[str, Any]:
+        ############################################################################
+        # HIGHLIGHT - In this case, the InsightViewSet class is adopting the get_queryset method from the StructuredViewSetMixin.
+
+        # Mixins are used if you don't want a class to inherit from another class (i.e. be its child class) but you want it to adopt some attributes / methods. 
+        # - You can think of mixins as uncles and aunts but not necessarily parents. 
+        # - avoid issues and complexities of multiple inheritance 
+        # - - (i.e. if class D has parents B and C, both of whose parent is A, then does D use B or C's version of any given method)
+
+        # ACTIVITY 4A - Trigger the code below by using the software application, setting breakpoints, and observing what happens.
+        # - Why are mixins used here - briefly explain below. Here are some ideas, but which ones apply in this case? Any other reasons?
+        # - (A) mixin can be used by multiple classes - code reusability 
+        # - - (i.e. avoiding code repetition and promoting code reuse, so there is less complexity and room for error)
+        # - - helps with collaboration
+        # - - in https://www.patterns.dev/posts/mixin-pattern/, all animals (dogs, cats, etc) can use the animalFunctionality mixin
+        
+        # - (B) adding lots of optional attributes/methods 
+        # - - (i.e. you want a class to avail of several optional properties or methods)
+        # - - in https://stackoverflow.com/a/547714/1194050, mixins let you allow more supports as needed, but not by default, to instances of Request 
+
+        # - (C) compartmentalization
+        # - - (i.e. code at different levels [data touching, logic, view touching, etc] should be separated so different developers can collaborate easily)
+        # - - in https://www.patterns.dev/posts/mixin-pattern/, functionality for animals in general in animalFunctionality can be separated from dog-specific functionality
+
+        # Hint: Think carefully about the domain / purpose of the application.
+
+        # - (note to experimenter: put get_queryset implementation on side-by-side view)
+        ############################################################################
         team = self.team
         filter = Filter(request=request, team=self.team)
 

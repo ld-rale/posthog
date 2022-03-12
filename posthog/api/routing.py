@@ -26,7 +26,38 @@ class DefaultRouterPlusPlus(ExtendedDefaultRouter):
         super().__init__(*args, **kwargs)
         self.trailing_slash = r"/?"
 
+################################################################################
+# HIGHLIGHT - Mixins let a class adopt methods and attributes of another class. 
+# - In this case, other classes may adopt properties or methods from the StructuredViewSetMixin class.
 
+# Mixins are used if you don't want a class to inherit from another class (i.e. be its child class) but you want it to adopt some attributes / methods. 
+# - You can think of mixins as uncles and aunts but not necessarily parents. 
+# - avoid issues and complexities of multiple inheritance 
+# - - (i.e. if class D has parents B and C, both of whose parent is A, then does D use B or C's version of any given method)
+
+# Tutorial Example: https://www.patterns.dev/posts/mixin-pattern/
+
+# Mixins are used for: 
+# - (A) reuse 
+# - - (i.e. avoiding code repetition and promoting code reuse, so there is less complexity and room for error)
+# - - helps with collaboration
+# - - in https://www.patterns.dev/posts/mixin-pattern/, all animals (dogs, cats, etc) can use the animalFunctionality mixin
+
+# - (B) providing optional methods / properties 
+# - - (i.e. you want a class to avail of several optional properties or methods)
+# - - in https://stackoverflow.com/a/547714/1194050, mixins let you allow more supports as needed, but not by default, to instances of Request 
+
+# - (C) compartmentalization
+# - - (i.e. code at different levels [data touching, logic, view touching, etc] should be separated so different developers can collaborate easily)
+# - - in https://www.patterns.dev/posts/mixin-pattern/, functionality for animals in general in animalFunctionality can be separated from dog-specific functionality
+
+# ACTIVITY 1 - Scan the mixin code below and summarize what you think the Mixin does.
+
+# ACTIVITY 2 - Highlight at least 5 classes in this codebase that use this mixin. 
+# - Hint: use VS Code's search feature.
+
+#(note to experimenter: show highlight / mixin label on file in filesystem during demo)
+################################################################################
 class StructuredViewSetMixin(_GenericViewSet):
     # This flag disables nested routing handling, reverting to the old request.user.team behavior
     # Allows for a smoother transition from the old flat API structure to the newer nested one
@@ -44,6 +75,18 @@ class StructuredViewSetMixin(_GenericViewSet):
         authentication.BasicAuthentication,
     ]
 
+    ############################################################################
+    # HIGHLIGHT - Instances of some classes (see Insight.py line 173) have used this Mixin method.
+
+    # ACTIVITY 3A - Highlight where this Mixin's methods get_queryset is being adopted / used by a class (or class instance) that includes this Mixin. 
+    # - Hint: look at the other highlighted files in the file system.
+    # - Trigger the mixin code (i.e. the "mixed in" code) below by using the software application, setting breakpoints, and watching them trigger.
+    # - Describe how this Mixin's get_queryset method is being used there.
+
+    # [SKIP] ACTIVITY 6 - Now we are going remove all declarations of StructuredViewSetMixin and also the AnalyticsDestroyModelMixin.
+    # [SKIP] - And you should fill in each blank, based on the methods / properties that the class adopting the mixins uses.
+    # [SKIP] (note to self: show how the code snippets would get removed and one would have to fill them back in)  
+    ############################################################################
     def get_queryset(self):
         queryset = super().get_queryset()
         return self.filter_queryset_by_parents_lookups(queryset)
@@ -61,6 +104,15 @@ class StructuredViewSetMixin(_GenericViewSet):
             return team.id
         return self.parents_query_dict["team_id"]
 
+    ############################################################################
+    # HIGHLIGHT - Instances of some classes (see Insight.py line 205) have used this Mixin property.
+
+    # ACTIVITY 3B - Highlight where this Mixin's property team is being adopted / used by a class (or class instance) that includes this Mixin. 
+    # - Hint: look at the other highlighted files in the file system.
+    # - Trigger the mixin code (i.e. the "mixed in" code) below by using the software application, setting breakpoints, and watching them trigger.
+    # - Describe how this Mixin's team property is being used there.
+
+    ############################################################################
     @property
     def team(self) -> Team:
         team_from_token = self._get_team_from_request()
