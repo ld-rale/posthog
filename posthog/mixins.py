@@ -12,9 +12,11 @@ class AnalyticsDestroyModelMixin:
     """
 
     def perform_destroy(self, instance):
+        print("HIGHLIGHT in AnalyticsDestroyModelMixin perform_destroy")
         instance.delete()
 
     def destroy(self, request, *args, **kwgars):
+        print("HIGHLIGHT in AnalyticsDestroyModelMixin destroy")
 
         instance = self.get_object()  # type: ignore
 

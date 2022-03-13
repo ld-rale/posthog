@@ -251,7 +251,7 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
     ############################################################################
     def get_queryset(self) -> QuerySet:
         print("HIGHLIGHT in InsightViewSet get_queryset")
-        queryset = super().get_queryset()
+        queryset = super().get_queryset() 
         if self.action == "list":
             queryset = queryset.filter(deleted=False)
             queryset = self._filter_request(self.request, queryset)

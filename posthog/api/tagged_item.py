@@ -72,6 +72,7 @@ class TaggedItemSerializerMixin(serializers.Serializer):
 
 class TaggedItemViewSetMixin(viewsets.GenericViewSet):
     def is_licensed(self):
+        print("HIGHLIGHT in TaggedItemViewSetMixin is_licensed")
         return (
             not self.request.user.is_anonymous
             # The below triggers an extra query to resolve user's organization.
@@ -79,6 +80,7 @@ class TaggedItemViewSetMixin(viewsets.GenericViewSet):
         )
 
     def get_queryset(self):
+        print("HIGHLIGHT in TaggedItemViewSetMixin get_queryset")
         queryset = super(TaggedItemViewSetMixin, self).get_queryset()
         if self.is_licensed():
             return queryset.prefetch_related(
