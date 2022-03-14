@@ -92,6 +92,12 @@ export const scene: SceneExport = {
     logic: savedInsightsLogic,
 }
 
+// HIGHLIGHT - MV* (MVC, MVVM, MVP, MVT) divide user interface implemenations into 3 interconnected elements - the model for data related management, the view (or in the case of django the template) for visual representations, and the controller for logic for manipulating the model or view. Nuances and examples:
+// - https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller
+// - https://levelup.gitconnected.com/mvc-vs-mvp-vs-mvvm-35e0d4b933b4
+// - https://www.geeksforgeeks.org/difference-between-mvc-and-mvt-design-patterns/
+
+// Below you will find the Insight MV* view (i.e. "Template" in Django).
 function NewInsightButton(): JSX.Element {
     const menu = (
         <Menu
