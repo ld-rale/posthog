@@ -168,6 +168,7 @@ class FeatureFlagViewSet(StructuredViewSetMixin, AnalyticsDestroyModelMixin, vie
         if not request.user.is_authenticated:  # for mypy
             raise exceptions.NotAuthenticated()
 
+        #4B
         feature_flags = (
             FeatureFlag.objects.filter(team=self.team, active=True, deleted=False)
             .prefetch_related(
@@ -265,6 +266,7 @@ class FeatureFlagOverrideViewset(StructuredViewSetMixin, AnalyticsDestroyModelMi
 
     def get_queryset(self) -> QuerySet:
         print("HIGHLIGHT in FeatureFlagViewSet get_queryset")
+        #4A
         return super().get_queryset().filter(user=self.request.user)
 
     @action(methods=["POST"], detail=False)

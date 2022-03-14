@@ -95,6 +95,7 @@ class EventViewSet(StructuredViewSetMixin, mixins.RetrieveModelMixin, mixins.Lis
         if is_csv_request:
             limit = min(limit, self.CSV_EXPORT_MAXIMUM_LIMIT)
 
+        #4B
         team = self.team
         filter = Filter(request=request, team=self.team)
 

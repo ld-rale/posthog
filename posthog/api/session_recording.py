@@ -51,6 +51,7 @@ class SessionRecordingViewSet(StructuredViewSetMixin, viewsets.GenericViewSet):
 
     def _get_session_recording_list(self, filter):
         print("HIGHLIGHT in SessionRecordingViewSet _get_session_recording_list")
+        #4B
         return ClickhouseSessionRecordingList(filter=filter, team=self.team).run()
 
     def _get_session_recording_snapshots(self, request, session_recording_id, limit, offset):

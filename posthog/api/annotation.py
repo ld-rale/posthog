@@ -61,6 +61,7 @@ class AnnotationsViewSet(StructuredViewSetMixin, AnalyticsDestroyModelMixin, vie
 
     def get_queryset(self) -> QuerySet:
         print("HIGHLIGHT in AnnotationsViewSet get_queryset")
+        # 4A
         queryset = super().get_queryset()
         if self.action == "list":
             queryset = self._filter_request(self.request, queryset)

@@ -78,7 +78,17 @@ class TaggedItemViewSetMixin(viewsets.GenericViewSet):
             # The below triggers an extra query to resolve user's organization.
             and self.request.user.organization.is_feature_available(AvailableFeature.TAGGING)  # type: ignore
         )
+    ############################################################################
+    # HIGHLIGHT - Instances of some classes (see Insight.py line 173) have used this Mixin method.
 
+    # ACTIVITY 3C - Highlight where this Mixin's methods get_queryset is being adopted / used by a class (or class instance) that includes this Mixin. 
+    # - Hint: look at the other highlighted files in the file system.
+    # - Trigger the mixin code (i.e. the "mixed in" code) below by using the software application, writing print statements, and watching them trigger.
+    # - - You can uncomment the prints we included and print variables too.
+    # - Describe how this Mixin's get_queryset method is being used there.
+    # - i.e. what does this Mixin's get_queryset do?
+    # - i.e. what does the class that adopts this Mixin's get_queryset do? 
+    ############################################################################
     def get_queryset(self):
         print("HIGHLIGHT in TaggedItemViewSetMixin get_queryset")
         queryset = super(TaggedItemViewSetMixin, self).get_queryset()

@@ -153,6 +153,7 @@ class CohortViewSet(StructuredViewSetMixin, viewsets.ModelViewSet):
 
     def get_queryset(self) -> QuerySet:
         print("HIGHLIGHT in CohortViewSet get_queryset")
+        #4A
         queryset = super().get_queryset()
         if self.action == "list":
             queryset = queryset.filter(deleted=False)
@@ -163,6 +164,7 @@ class CohortViewSet(StructuredViewSetMixin, viewsets.ModelViewSet):
     def persons(self, request: Request, **kwargs) -> Response:
         print("HIGHLIGHT in CohortViewSet get_queryset")
         cohort: Cohort = self.get_object()
+        # 4B
         team = self.team
         filter = Filter(request=request, team=self.team)
 

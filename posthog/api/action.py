@@ -168,6 +168,7 @@ class ActionViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mod
 
     def get_queryset(self):
         print("HIGHLIGHT in ActionViewSet get_queryset")
+        #4A
         queryset = super().get_queryset()
         if self.action == "list":
             queryset = queryset.filter(deleted=False)
@@ -185,6 +186,7 @@ class ActionViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mod
     @action(methods=["GET"], detail=False)
     def people(self, request: request.Request, *args: Any, **kwargs: Any) -> Response:
         print("HIGHLIGHT in ActionViewSet people")
+        #4B
         team = self.team
         filter = Filter(request=request, team=self.team)
         entity = get_target_entity(filter)
