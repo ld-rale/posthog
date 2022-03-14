@@ -204,6 +204,12 @@ class InsightSerializer(TaggedItemSerializerMixin, InsightBasicSerializer):
 # - https://www.geeksforgeeks.org/difference-between-mvc-and-mvt-design-patterns/
 
 # Below you will find the Insight MV* controller (i.e. "View" in Django).
+
+# Activity 4 - How does this controller access the data model (i.e. which line of code)? What data does the model provide the controller?
+
+# Activity 5 - How does the model data get to the view (i.e. template)? What data does the model provide and how does it fill the template?
+# - Hint 1) go to the Network tab in CDT on the /insights page.
+# - Hint 2) look at the URL configuration files (i.e. urls.py) 
 ############################################################################
 
 ############################################################################

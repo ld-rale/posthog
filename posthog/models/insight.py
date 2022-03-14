@@ -28,6 +28,8 @@ def generate_short_id():
 # Activity 1 (Super Easy) - Highlight the Insight model.
 # Activity 2 - Highlight the Insight's controller (in Django, confusingly, they say "View" for the MV* controller, and "Template" for view). 
 # Activity 3 - Highlight the Insight's view (in Django, confusingly, they say "Template" for the MV* view)
+
+# Activity 6 - Why is MV* used here over no framework (i.e. mixing data touching, view touching logic like in vanilla PHP https://en.wikipedia.org/wiki/PHP) ?
 ############################################################################
 class Insight(models.Model):
     """

@@ -98,6 +98,8 @@ export const scene: SceneExport = {
 // - https://www.geeksforgeeks.org/difference-between-mvc-and-mvt-design-patterns/
 
 // Below you will find the Insight MV* view (i.e. "Template" in Django).
+
+// Activity 7 - This is a subjective question, but would you consider this MVC, MVVM, MVP, MVT, and why do you think the code architectures chose that?
 function NewInsightButton(): JSX.Element {
     const menu = (
         <Menu
