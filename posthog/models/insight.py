@@ -18,19 +18,6 @@ def generate_short_id():
     """Generate securely random 8 characters long alphanumeric ID."""
     return "".join(secrets.choice(string.ascii_letters + string.digits) for _ in range(8))
 
-############################################################################
-# HIGHLIGHT - MV* (MVC, MVVM, MVP, MVT) divide user interface implemenations into 3 interconnected elements - the model for data related management, the view (or in the case of django the template) for visual representations, and the controller for logic for manipulating the model or view. Nuances and examples:
-# - https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller
-# - https://levelup.gitconnected.com/mvc-vs-mvp-vs-mvvm-35e0d4b933b4
-# - https://www.geeksforgeeks.org/difference-between-mvc-and-mvt-design-patterns/
-
-# Below you will find the Insight Model.
-# Activity 1 (Super Easy) - Highlight the Insight model.
-# Activity 2 - Highlight the Insight's controller (in Django, confusingly, they say "View" for the MV* controller, and "Template" for view). 
-# Activity 3 - Highlight the Insight's view (in Django, confusingly, they say "Template" for the MV* view)
-
-# Activity 6 - Why is MV* used here over no framework (i.e. mixing data touching, view touching logic like in vanilla PHP https://en.wikipedia.org/wiki/PHP) ?
-############################################################################
 class Insight(models.Model):
     """
     Stores saved insights along with their entire configuration options. Saved insights can be stored as standalone

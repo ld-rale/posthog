@@ -197,29 +197,6 @@ class InsightSerializer(TaggedItemSerializerMixin, InsightBasicSerializer):
         representation["filters"] = instance.dashboard_filters(dashboard=self.context.get("dashboard"))
         return representation
 
-############################################################################
-# HIGHLIGHT - MV* (MVC, MVVM, MVP, MVT) divide user interface implemenations into 3 interconnected elements - the model for data related management, the view (or in the case of django the template) for visual representations, and the controller for logic for manipulating the model or view. Nuances and examples:
-# - https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller
-# - https://levelup.gitconnected.com/mvc-vs-mvp-vs-mvvm-35e0d4b933b4
-# - https://www.geeksforgeeks.org/difference-between-mvc-and-mvt-design-patterns/
-
-# Below you will find the Insight MV* controller (i.e. "View" in Django).
-
-# Activity 4 - How does this controller access the data model (i.e. which line of code)? What data does the model provide the controller?
-
-# Activity 5 - How does the model data get to the view (i.e. template)? What data does the model provide and how does it fill the template?
-# - Hint 1) go to the Network tab in CDT on the /insights page.
-# - Hint 2) look at the URL configuration files (i.e. urls.py) 
-############################################################################
-
-############################################################################
-# HIGHLIGHT - Mixins let a class adopt methods and attributes of another class. 
-# - In this case, the InsightViewSet is adopting methods / attributes from the StructuredViewSetMixin.
-
-# Tutorial Example: https://www.patterns.dev/posts/mixin-pattern/
-
-# (note to self: show highlight / mixin label on file in filesystem during demo)
-############################################################################
 class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.ModelViewSet):
     queryset = Insight.objects.all().prefetch_related(
         "dashboard", "dashboard__team", "dashboard__team__organization", "created_by"
@@ -231,41 +208,13 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
     include_in_docs = True
 
     def get_serializer_class(self) -> Type[serializers.BaseSerializer]:
-        print("HIGHLIGHT in InsightViewSet get_serializer_class")
         if (self.action == "list" or self.action == "retrieve") and str_to_bool(
             self.request.query_params.get("basic", "0"),
         ):
             return InsightBasicSerializer
         return super().get_serializer_class()
-    ############################################################################
-    # HIGHLIGHT - In this case, the InsightViewSet class is adopting the get_queryset method from the StructuredViewSetMixin.
 
-    # Mixins are used if you don't want a class to inherit from another class (i.e. be its child class) but you want it to adopt some attributes / methods. 
-    # - You can think of mixins as uncles and aunts but not necessarily parents. 
-    # - avoid issues and complexities of multiple inheritance 
-    # - - (i.e. if class D has parents B and C, both of whose parent is A, then does D use B or C's version of any given method)
-
-    # ACTIVITY 4A - Trigger the code below by using the software application, writing print statements, and observing what happens.
-    # - Why are mixins used here - briefly explain below. Here are some ideas, but which ones apply in this case? Any other reasons?
-    # - (A) mixin can be used by multiple classes - code reusability 
-    # - - (i.e. avoiding code repetition and promoting code reuse, so there is less complexity and room for error)
-    # - - helps with collaboration
-    # - - in https://www.patterns.dev/posts/mixin-pattern/, all animals (dogs, cats, etc) can use the animalFunctionality mixin
-    
-    # - (B) adding lots of optional attributes/methods 
-    # - - (i.e. you want a class to avail of several optional properties or methods)
-    # - - in https://stackoverflow.com/a/547714/1194050, mixins let you allow more supports as needed, but not by default, to instances of Request 
-
-    # - (C) compartmentalization
-    # - - (i.e. code at different levels [data touching, logic, view touching, etc] should be separated so different developers can collaborate easily)
-    # - - in https://www.patterns.dev/posts/mixin-pattern/, functionality for animals in general in animalFunctionality can be separated from dog-specific functionality
-
-    # Hint: Think carefully about the domain / purpose of the application.
-
-    # - (note to experimenter: put get_queryset implementation on side-by-side view)
-    ############################################################################
     def get_queryset(self) -> QuerySet:
-        print("HIGHLIGHT in InsightViewSet get_queryset")
         queryset = super().get_queryset() 
         if self.action == "list":
             queryset = queryset.filter(deleted=False)
@@ -280,7 +229,6 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
         return queryset
 
     def _filter_request(self, request: request.Request, queryset: QuerySet) -> QuerySet:
-        print("HIGHLIGHT in InsightViewSet _filter_request")
         filters = request.GET.dict()
 
         for key in filters:
@@ -307,7 +255,6 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
 
     @action(methods=["patch"], detail=False)
     def layouts(self, request, **kwargs):
-        print("HIGHLIGHT in InsightViewSet layouts")
         """Dashboard item layouts."""
         queryset = self.get_queryset()
         for data in request.data["items"]:
@@ -342,7 +289,6 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
     )
     @action(methods=["GET", "POST"], detail=False)
     def trend(self, request: request.Request, *args: Any, **kwargs: Any) -> Response:
-        print("HIGHLIGHT in InsightViewSet trend")
         try:
             serializer = TrendSerializer(request=request)
             serializer.is_valid(raise_exception=True)
@@ -360,34 +306,6 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
 
     @cached_function
     def calculate_trends(self, request: request.Request) -> Dict[str, Any]:
-        ############################################################################
-        # HIGHLIGHT - In this case, the InsightViewSet class is adopting the get_queryset method from the StructuredViewSetMixin.
-
-        # Mixins are used if you don't want a class to inherit from another class (i.e. be its child class) but you want it to adopt some attributes / methods. 
-        # - You can think of mixins as uncles and aunts but not necessarily parents. 
-        # - avoid issues and complexities of multiple inheritance 
-        # - - (i.e. if class D has parents B and C, both of whose parent is A, then does D use B or C's version of any given method)
-
-        # ACTIVITY 4B - Trigger the code below by using the software application, writing print statements, and observing what happens.
-        # - Why are mixins used here - briefly explain below. Here are some ideas, but which ones apply in this case? Any other reasons?
-        # - (A) mixin can be used by multiple classes - code reusability 
-        # - - (i.e. avoiding code repetition and promoting code reuse, so there is less complexity and room for error)
-        # - - helps with collaboration
-        # - - in https://www.patterns.dev/posts/mixin-pattern/, all animals (dogs, cats, etc) can use the animalFunctionality mixin
-        
-        # - (B) adding lots of optional attributes/methods 
-        # - - (i.e. you want a class to avail of several optional properties or methods)
-        # - - in https://stackoverflow.com/a/547714/1194050, mixins let you allow more supports as needed, but not by default, to instances of Request 
-
-        # - (C) compartmentalization
-        # - - (i.e. code at different levels [data touching, logic, view touching, etc] should be separated so different developers can collaborate easily)
-        # - - in https://www.patterns.dev/posts/mixin-pattern/, functionality for animals in general in animalFunctionality can be separated from dog-specific functionality
-
-        # Hint: Think carefully about the domain / purpose of the application.
-
-        # - (note to experimenter: put get_queryset implementation on side-by-side view)
-        ############################################################################
-        print("HIGHLIGHT in InsightViewSet calculate_trends")
         team = self.team
         filter = Filter(request=request, team=self.team)
 
@@ -425,7 +343,6 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
     )
     @action(methods=["GET", "POST"], detail=False)
     def funnel(self, request: request.Request, *args: Any, **kwargs: Any) -> Response:
-        print("HIGHLIGHT in InsightViewSet funnel")
         try:
             serializer = FunnelSerializer(request=request)
             serializer.is_valid(raise_exception=True)
@@ -440,7 +357,6 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
 
     @cached_function
     def calculate_funnel(self, request: request.Request) -> Dict[str, Any]:
-        print("HIGHLIGHT in InsightViewSet calculate_funnel")
         team = self.team
         filter = Filter(request=request, data={"insight": INSIGHT_FUNNELS}, team=self.team)
 
@@ -460,13 +376,11 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
     # ******************************************
     @action(methods=["GET"], detail=False)
     def retention(self, request: request.Request, *args: Any, **kwargs: Any) -> Response:
-        print("HIGHLIGHT in InsightViewSet retention")
         result = self.calculate_retention(request)
         return Response(result)
 
     @cached_function
     def calculate_retention(self, request: request.Request) -> Dict[str, Any]:
-        print("HIGHLIGHT in InsightViewSet calculate_retention")
         team = self.team
         data = {}
         if not request.GET.get("date_from"):
@@ -485,13 +399,11 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
     # ******************************************
     @action(methods=["GET", "POST"], detail=False)
     def path(self, request: request.Request, *args: Any, **kwargs: Any) -> Response:
-        print("HIGHLIGHT in InsightViewSet path")
         result = self.calculate_path(request)
         return Response(result)
 
     @cached_function
     def calculate_path(self, request: request.Request) -> Dict[str, Any]:
-        print("HIGHLIGHT in InsightViewSet calculate_path")
         team = self.team
         filter = PathFilter(request=request, data={"insight": INSIGHT_PATHS}, team=self.team)
 
@@ -511,7 +423,6 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
 
     # Checks if a dashboard id has been set and if so, update the refresh date
     def _refresh_dashboard(self, request) -> None:
-        print("HIGHLIGHT in InsightViewSet _refresh_dashboard")
         dashboard_id = request.GET.get(FROM_DASHBOARD, None)
         if dashboard_id:
             Insight.objects.filter(pk=dashboard_id).update(last_refresh=now())
