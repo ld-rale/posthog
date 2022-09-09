@@ -45,7 +45,10 @@ class StructuredViewSetMixin(_GenericViewSet):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        return self.filter_queryset_by_parents_lookups(queryset)
+        print("in get_queryset mixin method, data before:", queryset)
+        to_return = self.filter_queryset_by_parents_lookups(queryset)
+        print("in get_queryset mixin method, data after:", to_return)
+        return to_return
 
     @property
     def team_id(self) -> int:

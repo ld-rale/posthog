@@ -215,7 +215,7 @@ class InsightViewSet(TaggedItemViewSetMixin, StructuredViewSetMixin, viewsets.Mo
         return super().get_serializer_class()
 
     def get_queryset(self) -> QuerySet:
-        queryset = super().get_queryset() 
+        queryset = super().get_queryset()
         if self.action == "list":
             queryset = queryset.filter(deleted=False)
             queryset = self._filter_request(self.request, queryset)
