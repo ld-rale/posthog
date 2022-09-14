@@ -45,9 +45,9 @@ class StructuredViewSetMixin(_GenericViewSet):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        print("in get_queryset mixin method, data before:", queryset)
+        print("\n\n===in SVSM get_queryset mixin method, data before:" + str(queryset) + "==\n\n")
         to_return = self.filter_queryset_by_parents_lookups(queryset)
-        print("in get_queryset mixin method, data after:", to_return)
+        print("\n\n===in SVSM get_queryset mixin method, data after:" + str(to_return) + "==\n\n")
         return to_return
 
     @property
@@ -94,13 +94,20 @@ class StructuredViewSetMixin(_GenericViewSet):
             raise NotFound(detail="Organization not found.")
 
     def filter_queryset_by_parents_lookups(self, queryset):
+        print("in filter_queryset_by_parents_lookups, queryset:" + str(queryset))
         parents_query_dict = self.parents_query_dict.copy()
+        print("parents_query_dict", parents_query_dict)
 
+        print("self.filter_rewrite_rules.items() " + str(self.filter_rewrite_rules.items()))
         for source, destination in self.filter_rewrite_rules.items():
+            print("source: " + str(source) + " destination: " + str(destination))
             parents_query_dict[destination] = parents_query_dict[source]
+
             del parents_query_dict[source]
         if parents_query_dict:
             try:
+                print("in try, parents_query_dict " + str(parents_query_dict))
+                #print("in try, **parents_query_dict " + str(**parents_query_dict))
                 return queryset.filter(**parents_query_dict)
             except ValueError:
                 raise NotFound()
@@ -110,42 +117,61 @@ class StructuredViewSetMixin(_GenericViewSet):
     @cached_property
     def parents_query_dict(self) -> Dict[str, Any]:
         # used to override the last visited project if there's a token in the request
+        print("in parents_query_dict")
         team_from_request = self._get_team_from_request()
+        print("in team_from_request " + str(team_from_request))
 
+        print("self.legacy_team_compatibility:" + str(self.legacy_team_compatibility))
         if self.legacy_team_compatibility:
+            print("self.request.user.is_authenticated", self.request.user.is_authenticated)
             if not self.request.user.is_authenticated:
                 raise AuthenticationFailed()
             project = team_from_request or self.request.user.team
+            print("project" + str(project))
             if project is None:
+                print("project validation error")
                 raise ValidationError("This endpoint requires a project.")
+            print("about to return team_id, project.id")
             return {"team_id": project.id}
         result = {}
         # process URL paremetrs (here called kwargs), such as organization_id in /api/organizations/:organization_id/
+        print("self.kwargs.items()" + str(self.kwargs.items()))
         for kwarg_name, kwarg_value in self.kwargs.items():
+            print("kwarg_name " + str(kwarg_name) + " kwarg_value " + str(kwarg_value))
             # drf-extensions nested parameters are prefixed
+            print("extensions_api_settings.DEFAULT_PARENT_LOOKUP_KWARG_NAME_PREFIX " + str(extensions_api_settings.DEFAULT_PARENT_LOOKUP_KWARG_NAME_PREFIX))
             if kwarg_name.startswith(extensions_api_settings.DEFAULT_PARENT_LOOKUP_KWARG_NAME_PREFIX):
                 query_lookup = kwarg_name.replace(
                     extensions_api_settings.DEFAULT_PARENT_LOOKUP_KWARG_NAME_PREFIX, "", 1
                 )
+                print("query_lookup" + str(query_lookup))
                 query_value = kwarg_value
                 if query_value == "@current":
+                    print("self.request.user.is_authenticated" + str(self.request.user.is_authenticated))
                     if not self.request.user.is_authenticated:
                         raise AuthenticationFailed()
                     if query_lookup == "team_id":
                         project = self.request.user.team
+                        print("in team_id, project " + str(project))
                         if project is None:
                             raise NotFound("Project not found.")
                         query_value = project.id
+                        print("query_value" + str(query_value))
                     elif query_lookup == "organization_id":
                         organization = self.request.user.organization
+                        print("organization" + str(organization))
                         if organization is None:
                             raise NotFound("Organization not found.")
                         query_value = organization.id
+                        print("query_value" + str(query_value))
                 elif query_lookup == "team_id":
+                    print("query_lookup" + str(query_lookup))
                     try:
                         query_value = team_from_request.id if team_from_request else int(query_value)
+                        print("query_value" + str(query_value))
                     except ValueError:
                         raise NotFound()
+                print("result, query_lookup, query_value" + str(result) + " " + str(query_lookup) + " " + str(query_value))
                 result[query_lookup] = query_value
         return result
 

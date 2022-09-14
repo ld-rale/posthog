@@ -80,10 +80,10 @@ class TaggedItemViewSetMixin(viewsets.GenericViewSet):
 
     def get_queryset(self):
         queryset = super(TaggedItemViewSetMixin, self).get_queryset()
-        print("in get_queryset mixin method, data after:", queryset)
+        print("\n\n===in TIVSM get_queryset mixin method, data before:" + str(queryset) + "==\n\n")
         if self.is_licensed():
             to_return = queryset.prefetch_related(
                 Prefetch("tagged_items", queryset=TaggedItem.objects.select_related("tag"), to_attr="prefetched_tags")
             )
-            print("in get_queryset mixin method, data after:", to_return)
+            print("\n\n===in TIVSM get_queryset mixin method, data after:" + str(to_return) + "==\n\n")
         return queryset
