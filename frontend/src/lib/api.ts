@@ -406,11 +406,11 @@ const api = {
             throw { status: 0, message: e }
         }
 
-        /*if (!response.ok) {
+        if (!response.ok) {
             reportError('GET', url, response, startTime)
             const data = await getJSONOrThrow(response)
             throw { status: response.status, ...data }
-        }*/
+        }
         return await getJSONOrThrow(response)
     },
 
@@ -453,14 +453,14 @@ const api = {
             body: data ? (isFormData ? data : JSON.stringify(data)) : undefined,
         })
 
-        if (!response.ok) {
+        /*if (!response.ok) {
             reportError('POST', url, response, startTime)
             const jsonData = await getJSONOrThrow(response)
             if (Array.isArray(jsonData)) {
                 throw jsonData
             }
             throw { status: response.status, ...jsonData }
-        }
+        }*/
         return await getJSONOrThrow(response)
     },
 

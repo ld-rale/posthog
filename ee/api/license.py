@@ -21,6 +21,8 @@ class LicenseSerializer(serializers.ModelSerializer):
         read_only_fields = ["plan", "valid_until", "max_users"]
 
     def create(self, validated_data: Any) -> Any:
+        print("license serializer create:" + str(validated_data))
+        print("super()", super())
         return super().create({"key": validated_data.get("key")})
 
 
