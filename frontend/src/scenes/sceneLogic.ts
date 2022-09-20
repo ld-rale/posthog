@@ -187,6 +187,7 @@ export const sceneLogic = kea<sceneLogicType>({
     },
     listeners: ({ values, actions, props, selectors }) => ({
         showUpgradeModal: ({ featureName }) => {
+            console.log("in sceneLogic - show modal");
             eventUsageLogic.actions.reportUpgradeModalShown(featureName)
         },
         guardAvailableFeature: ({ featureKey, featureName, featureCaption, featureAvailableCallback, guardOn }) => {
