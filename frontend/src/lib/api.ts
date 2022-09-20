@@ -406,11 +406,11 @@ const api = {
             throw { status: 0, message: e }
         }
 
-        if (!response.ok) {
+        /*if (!response.ok) {
             reportError('GET', url, response, startTime)
             const data = await getJSONOrThrow(response)
             throw { status: response.status, ...data }
-        }
+        }*/
         return await getJSONOrThrow(response)
     },
 

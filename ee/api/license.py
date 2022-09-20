@@ -31,6 +31,7 @@ class LicenseViewSet(
     serializer_class = LicenseSerializer
 
     def get_queryset(self) -> QuerySet:
+        print("license view set get_queryset")
         if getattr(settings, "MULTI_TENANCY", False):
             return License.objects.none()
 
