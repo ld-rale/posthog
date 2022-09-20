@@ -46,8 +46,18 @@ class StructuredViewSetMixin(_GenericViewSet):
     def get_queryset(self):
         queryset = super().get_queryset()
         print("\n\n===in SVSM get_queryset mixin method, data before:" + str(queryset) + "==\n\n")
+        try:
+            for i in queryset:
+                print(str(i) + str(i.name) + " for team " + str(i.team))
+        except:
+            print("not the insight model, skipping")
         to_return = self.filter_queryset_by_parents_lookups(queryset)
         print("\n\n===in SVSM get_queryset mixin method, data after:" + str(to_return) + "==\n\n")
+        try:
+            for i in to_return:
+                print(str(i) + str(i.name) + " for team " + str(i.team))
+        except:
+            print("not the insight model, skipping")
         return to_return
 
     @property
