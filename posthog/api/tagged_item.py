@@ -95,10 +95,10 @@ class TaggedItemViewSetMixin(viewsets.GenericViewSet):
             to_return = queryset.prefetch_related(
                 Prefetch("tagged_items", queryset=TaggedItem.objects.select_related("tag"), to_attr="prefetched_tags")
             )
-            print("\n\n===in TIVSM get_queryset mixin method, data after:" + str(to_return) + "==\n\n")
+            print("\n\n===in TIVSM get_queryset mixin method, data after:" + str(queryset) + "==\n\n")
             try:
                 for i in to_return:
-                    print("tivsm post" + str(i) + ", tagged items: " + str(i.tagged_items))
+                    print("tivsm post " + str(i) + ", tagged items: " + str(i.tagged_items))
                     try:
                         for pt in i.prefetched_tags:
                             print("pt:", pt.tag.name)
