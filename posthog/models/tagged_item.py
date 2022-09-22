@@ -78,6 +78,7 @@ class TaggedItem(UUIDModel):
 
     def save(self, *args, **kwargs):
         self.full_clean()
+        print("Adding tag in Tagged Item save call")
         return super(TaggedItem, self).save(*args, **kwargs)
 
     def __str__(self):
