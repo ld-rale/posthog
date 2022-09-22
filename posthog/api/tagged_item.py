@@ -83,7 +83,12 @@ class TaggedItemViewSetMixin(viewsets.GenericViewSet):
         print("\n\n===in TIVSM get_queryset mixin method, data before:" + str(queryset) + "==\n\n")
         try:
             for i in queryset:
-                print(str(i) + str(i.name) + " from TIVSM" +  str(i.tagged_items))
+                print(str(i) + str(i.name) + " from TIVSM " +  str(i.tagged_items))
+                try:
+                    for pt in i.prefetched_tags:
+                        print("pt: ", pt.tag.name)
+                except:
+                    print("insight object has no attribute prefetched_tags here")
         except:
             print("not the insight model, skipping")
         if self.is_licensed():
@@ -94,8 +99,11 @@ class TaggedItemViewSetMixin(viewsets.GenericViewSet):
             try:
                 for i in to_return:
                     print("tivsm post" + str(i) + ", tagged items: " + str(i.tagged_items))
-                    for pt in i.prefetched_tags:
-                        print("pt:", pt.tag.name)
+                    try:
+                        for pt in i.prefetched_tags:
+                            print("pt:", pt.tag.name)
+                    except:
+                        print("insight object has no attribute prefetched_tags here")
             except:
                 print("not the insight model, skipping")
         return queryset
