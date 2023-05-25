@@ -53,24 +53,28 @@ class StructuredViewSetMixin(_GenericViewSet):
             for i in queryset:
                 print(str(i) + str(i.name) + " for team " + str(i.team))
         except:
-            print("======")
-            for i in queryset:
-                print("group: ", str(i), "group_key:", str(i.group_key), "group_type_index:", str(i.group_type_index), "group_team:", str(i.team))
-                print("group_properties:", str(i.group_properties))
-            print("======")
-            print("not the insight model, skipping")
+            try:
+                print("======")
+                for i in queryset:
+                    print("group: ", str(i), "group_key:", str(i.group_key), "group_type_index:", str(i.group_type_index), "group_team:", str(i.team))
+                    print("group_properties:", str(i.group_properties))
+                print("======")
+            except:
+                print("not the insight or group tab so skipping")
         to_return = self.filter_queryset_by_parents_lookups(queryset)
         print("\n\n===in SVSM get_queryset mixin method, data after:" + str(to_return) + "==\n\n")
         try:
             for i in to_return:
                 print(str(i) + str(i.name) + " for team " + str(i.team))
         except:
-            print("======")
-            for i in to_return:
-                print("group: ", str(i), "group_key:", str(i.group_key), "group_type_index:", str(i.group_type_index), "group_team:", str(i.team))
-                print("group_properties:", str(i.group_properties))
-            print("======")
-            print("not the insight model, skipping")
+            try:
+                print("======")
+                for i in to_return:
+                    print("group: ", str(i), "group_key:", str(i.group_key), "group_type_index:", str(i.group_type_index), "group_team:", str(i.team))
+                    print("group_properties:", str(i.group_properties))
+                print("======")
+            except:
+                print("not the insight or group tab so skipping")
         return to_return
 
     @property
