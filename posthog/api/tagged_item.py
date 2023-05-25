@@ -79,6 +79,7 @@ class TaggedItemViewSetMixin(viewsets.GenericViewSet):
         )
 
     def get_queryset(self):
+        print("in TIVSM before super(TaggedItemViewSetMixin, self).get_queryset() call, super:", super(TaggedItemViewSetMixin, self).get_queryset)
         queryset = super(TaggedItemViewSetMixin, self).get_queryset()
         print("\n\n===in TIVSM get_queryset mixin method, data before:" + str(queryset) + "==\n\n")
         try:

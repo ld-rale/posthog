@@ -13,6 +13,8 @@ from posthog.models.organization import Organization
 from posthog.models.team import Team
 from posthog.models.user import User
 
+import json
+
 if TYPE_CHECKING:
     _GenericViewSet = GenericViewSet
 else:
@@ -44,12 +46,18 @@ class StructuredViewSetMixin(_GenericViewSet):
     ]
 
     def get_queryset(self):
+        print("in SVSM, before super().get_queryset() call, super: ", super().get_queryset)
         queryset = super().get_queryset()
         print("\n\n===in SVSM get_queryset mixin method, data before:" + str(queryset) + "==\n\n")
         try:
             for i in queryset:
                 print(str(i) + str(i.name) + " for team " + str(i.team))
         except:
+            print("======")
+            for i in queryset:
+                print("group: ", str(i), "group_key:", str(i.group_key), "group_type_index:", str(i.group_type_index), "group_team:", str(i.team))
+                print("group_properties:", str(i.group_properties))
+            print("======")
             print("not the insight model, skipping")
         to_return = self.filter_queryset_by_parents_lookups(queryset)
         print("\n\n===in SVSM get_queryset mixin method, data after:" + str(to_return) + "==\n\n")
@@ -57,6 +65,11 @@ class StructuredViewSetMixin(_GenericViewSet):
             for i in to_return:
                 print(str(i) + str(i.name) + " for team " + str(i.team))
         except:
+            print("======")
+            for i in to_return:
+                print("group: ", str(i), "group_key:", str(i.group_key), "group_type_index:", str(i.group_type_index), "group_team:", str(i.team))
+                print("group_properties:", str(i.group_properties))
+            print("======")
             print("not the insight model, skipping")
         return to_return
 

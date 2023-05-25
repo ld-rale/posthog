@@ -67,6 +67,7 @@ class ClickhouseGroupsView(StructuredViewSetMixin, mixins.ListModelMixin, viewse
 
     @action(methods=["GET"], detail=False)
     def find(self, request: request.Request, **kw) -> response.Response:
+        print("In ClickhouseGroupsView, find")
         try:
             group = self.get_queryset().get(group_key=request.GET["group_key"])
             data = self.get_serializer(group).data
@@ -76,6 +77,7 @@ class ClickhouseGroupsView(StructuredViewSetMixin, mixins.ListModelMixin, viewse
 
     @action(methods=["GET"], detail=False)
     def related(self, request: request.Request, pk=None, **kw) -> response.Response:
+        print("In ClickhouseGroupsView, related")
         group_type_index = request.GET.get("group_type_index")
         id = request.GET["id"]
 
@@ -84,6 +86,7 @@ class ClickhouseGroupsView(StructuredViewSetMixin, mixins.ListModelMixin, viewse
 
     @action(methods=["GET"], detail=False)
     def property_definitions(self, request: request.Request, **kw):
+        print("In ClickhouseGroupsView, property_definitions")
         rows = sync_execute(
             f"""
             SELECT group_type_index, tupleElement(keysAndValues, 1) as key, count(*) as count
@@ -104,6 +107,7 @@ class ClickhouseGroupsView(StructuredViewSetMixin, mixins.ListModelMixin, viewse
 
     @action(methods=["GET"], detail=False)
     def property_values(self, request: request.Request, **kw):
+        print("In ClickhouseGroupsView, property_values")
         rows = sync_execute(
             f"""
             SELECT {trim_quotes_expr("tupleElement(keysAndValues, 2)")} as value
